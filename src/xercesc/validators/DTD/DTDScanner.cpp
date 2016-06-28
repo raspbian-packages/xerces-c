@@ -2509,7 +2509,15 @@ void DTDScanner::scanExtSubsetDecl(const bool inIncludeSect, const bool isDTD)
         {
             while (true)
             {
-                const XMLCh nextCh = fReaderMgr->peekNextChar();
+                XMLCh nextCh;
+
+                try {
+                    nextCh = fReaderMgr->peekNextChar();
+                }
+                catch (XMLException& ex) {
+                    fScanner->emitError(XMLErrs::XMLException_Fatal, ex.getCode(), ex.getMessage(), NULL, NULL);
+                    nextCh = chNull;
+                }
 
                 if (!nextCh)
                 {
