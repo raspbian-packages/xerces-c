@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with autoreconf
+
+override_dh_auto_configure:
+	dh_auto_configure -- --disable-pretty-make
+
+override_dh_compress:
+	dh_compress -plibxerces-c-dev -Xexamples
+	dh_compress -plibxerces-c-doc -Xhtml
+	dh_compress -plibxerces-c3.1
+	dh_compress -plibxerces-c-samples
+
+override_dh_installexamples:
+	dh_installexamples -plibxerces-c-dev -X.o -X.deps -X.dirstamp
+
+override_dh_auto_build-indep:
+	mkdir doc/html
+	java -Djava.awt.headless=true -classpath '/usr/share/java/*' \
+		org.apache.stylebook.StyleBook "targetDirectory=doc/html" \
+		doc/xerces-c_book.xml doc/style
+	(cd doc && doxygen Doxyfile)
+	rm doc/html/graphics/charter-header.jpg
+	rm doc/html/graphics/program-others-3-header.jpg
+
