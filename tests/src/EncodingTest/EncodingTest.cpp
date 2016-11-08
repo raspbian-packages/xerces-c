@@ -71,7 +71,7 @@ void ParseErrorHandler::error(const SAXParseException& e)
     char* systemId = XMLString::transcode(e.getSystemId());
     char* message = XMLString::transcode(e.getMessage());
 
-    fprintf(stderr, "\nError at file \"%s\", line %d, char %d:  %s\n",
+    fprintf(stderr, "\nError at file \"%s\", line %lu, char %lu:  %s\n",
         systemId, e.getLineNumber(),
         e.getColumnNumber(), message);
 
@@ -86,7 +86,7 @@ void ParseErrorHandler::fatalError(const SAXParseException& e)
     char* systemId = XMLString::transcode(e.getSystemId());
     char* message = XMLString::transcode(e.getMessage());
 
-    fprintf(stderr, "\nFatal Error at file \"%s\", line %d, char %d:  %s\n",
+    fprintf(stderr, "\nFatal Error at file \"%s\", line %lu, char %lu:  %s\n",
         systemId, e.getLineNumber(),
         e.getColumnNumber(), message);
 
@@ -100,7 +100,7 @@ void ParseErrorHandler::warning(const SAXParseException& e)
     char* systemId = XMLString::transcode(e.getSystemId());
     char* message = XMLString::transcode(e.getMessage());
 
-    fprintf(stderr, "\nWarning at file \"%s\", line %d, char %d:  %s\n",
+    fprintf(stderr, "\nWarning at file \"%s\", line %lu, char %lu:  %s\n",
         systemId, e.getLineNumber(),
         e.getColumnNumber(), message);
 
@@ -337,7 +337,7 @@ static bool  processTestFile(const XMLCh* fileName)
             if (rawIndex < rawUData.getLen())
             {
                 fprintf(stderr, "Test file \"%s\": Bad hex number in udata element.  "
-                    "Data character number %d\n", cFileName, uData.getLen());
+                    "Data character number %lu\n", cFileName, uData.getLen());
                 return false;
             }
     }

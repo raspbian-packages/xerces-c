@@ -2241,7 +2241,7 @@ bool DOMTest::testDocument(DOMDocument* document)
         XMLString::transcode(elementNames[i], tempStr, 3999);
         if (XMLString::compareString(tempStr, n->getNodeName()))
         {
-            fprintf(stderr, "Comparison of this document's elements failed at element number %d at line %i \n", i, __LINE__);
+            fprintf(stderr, "Comparison of this document's elements failed at element number %lu at line %i \n", i, __LINE__);
             OK = false;
             break;
         }
@@ -2273,7 +2273,7 @@ bool DOMTest::testDocument(DOMDocument* document)
         XMLString::transcode(newElementNames[i], tempStr, 3999);
         if (XMLString::compareString(tempStr, n->getNodeName()))
         {
-            fprintf(stderr, "Comparison of new document's elements failed at element number %d at line %i \n", i, __LINE__);
+            fprintf(stderr, "Comparison of new document's elements failed at element number %lu at line %i \n", i, __LINE__);
             OK = false;
             break;
         }
@@ -2292,7 +2292,7 @@ bool DOMTest::testDocument(DOMDocument* document)
         XMLString::transcode(elementNames[i], tempStr, 3999);
         if (XMLString::compareString(tempStr, n->getNodeName()))
         {
-            fprintf(stderr, "Comparison of restored document's elements failed at element number %d at line %i \n", i, __LINE__);
+            fprintf(stderr, "Comparison of restored document's elements failed at element number %lu at line %i \n", i, __LINE__);
             OK = false;
             break;
         }
@@ -2714,7 +2714,7 @@ bool DOMTest::testDOMerrors(DOMDocument* document) {
         XMLString::transcode(xpath,xpathStr,99); \
         DOMXPathResult* result=(DOMXPathResult*)document->evaluate(xpathStr, document->getDocumentElement(), NULL, DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE, NULL); \
         if(result->getSnapshotLength() != expected) {  \
-            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%d nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
+            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%lu nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
             OK = false; \
         }   \
         result->release(); \
@@ -2732,7 +2732,7 @@ bool DOMTest::testDOMerrors(DOMDocument* document) {
         XMLString::transcode(xpath,xpathStr,99); \
         DOMXPathResult* result=(DOMXPathResult*)document->evaluate(xpathStr, document->getDocumentElement(), resolver, DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE, NULL); \
         if(result->getSnapshotLength() != expected) {  \
-            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%d nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
+            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%lu nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
             OK = false; \
         }   \
         result->release(); \
@@ -2990,7 +2990,7 @@ bool DOMTest::testElement(DOMDocument* document)
         if (XMLString::compareString(tempStr, n->getNodeName()))
         {
             fprintf(stderr, "Warning!!! Comparison of DOMElement's 'getElementsByTagName' "
-                            "and/or 'item' failed at element number %d at line %i \n", i, __LINE__ );
+                            "and/or 'item' failed at element number %lu at line %i \n", i, __LINE__ );
             fprintf(stderr, "\n");
             OK = false;
             break;
@@ -3019,7 +3019,7 @@ bool DOMTest::testElement(DOMDocument* document)
             if (XMLString::compareString(tempStr, n->getNodeValue()))
             {
                 fprintf(stderr, "Warning!!! Comparison of original text nodes via DOMNode*  'getChildNodes' & DOMNodeList 'item'\n"
-                    "     failed at text node: #%d at line %i \n     ", j, __LINE__ );
+                    "     failed at text node: #%lu at line %i \n     ", j, __LINE__ );
                 OK = false;
                 break;
             }
