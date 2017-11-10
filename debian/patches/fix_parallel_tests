@@ -1,0 +1,131 @@
+Description: Fix issues with parallel tests
+ Due to various race conditions, tests sometimes fail.  This patch addresses
+ some of the causes.
+Author: Bill Blough <devel@blough.us>
+Bug: https://issues.apache.org/jira/projects/XERCESC/issues/XERCESC-2123
+Last-Update: 2017-10-12
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/scripts/ThreadTest10
++++ b/tests/scripts/ThreadTest10
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest10 pass "" tests/ThreadTest -parser=sax -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest11
++++ b/tests/scripts/ThreadTest11
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=dom -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest11 pass "" tests/ThreadTest -parser=dom -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest12
++++ b/tests/scripts/ThreadTest12
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax2 -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest12 pass "" tests/ThreadTest -parser=sax2 -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest13
++++ b/tests/scripts/ThreadTest13
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest13 pass "" tests/ThreadTest -parser=sax -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest14
++++ b/tests/scripts/ThreadTest14
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=dom -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest14 pass "" tests/ThreadTest -parser=dom -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest15
++++ b/tests/scripts/ThreadTest15
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax2 -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
++run_test ThreadTest15 pass "" tests/ThreadTest -parser=sax2 -gc -n -s -f -v=always -quiet -threads 10 -time 20 personal-schema.xml
+--- a/tests/scripts/ThreadTest2
++++ b/tests/scripts/ThreadTest2
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=dom -v=never  -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest2 pass "" tests/ThreadTest -parser=dom -v=never  -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest3
++++ b/tests/scripts/ThreadTest3
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax2 -v=never  -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest3 pass "" tests/ThreadTest -parser=sax2 -v=never  -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest4
++++ b/tests/scripts/ThreadTest4
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest4 pass "" tests/ThreadTest -parser=sax -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest5
++++ b/tests/scripts/ThreadTest5
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=dom -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest5 pass "" tests/ThreadTest -parser=dom -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest6
++++ b/tests/scripts/ThreadTest6
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax2 -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest6 pass "" tests/ThreadTest -parser=sax2 -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest7
++++ b/tests/scripts/ThreadTest7
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax  -gc -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest7 pass "" tests/ThreadTest -parser=sax  -gc -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest8
++++ b/tests/scripts/ThreadTest8
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=dom  -gc -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest9 pass "" tests/ThreadTest -parser=dom  -gc -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/tests/scripts/ThreadTest9
++++ b/tests/scripts/ThreadTest9
+@@ -4,4 +4,4 @@ set -e
+ 
+ . ../scripts/run-test
+ 
+-run_test ThreadTest1 pass "" tests/ThreadTest -parser=sax2 -gc -v=always -quiet -threads 10 -time 20 personal.xml
++run_test ThreadTest9 pass "" tests/ThreadTest -parser=sax2 -gc -v=always -quiet -threads 10 -time 20 personal.xml
+--- a/scripts/run-test.in
++++ b/scripts/run-test.in
+@@ -19,7 +19,7 @@ run_test() {
+ 
+     builddir=$(pwd)
+     if [ ! -d observed ]; then
+-        mkdir observed
++        mkdir -p observed
+     fi
+     output="${builddir}/observed/${name}.log"
+ 
