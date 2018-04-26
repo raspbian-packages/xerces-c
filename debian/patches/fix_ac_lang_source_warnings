@@ -1,0 +1,59 @@
+Description: Fix AC_LANG_SOURCE_WARNINGS
+Author: Bill Blough <devel@blough.us
+Bug: https://issues.apache.org/jira/browse/XERCESC-2084
+Last-Update: 2016-12-11
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/m4/cxx_have_lstring.m4
++++ b/m4/cxx_have_lstring.m4
+@@ -14,8 +14,8 @@ ac_cv_cxx_have_lstring,
+ [AC_LANG_SAVE
+  AC_LANG_CPLUSPLUS
+  AC_COMPILE_IFELSE(
+-	AC_LANG_SOURCE(
+-		[[const wchar_t* s=L"wide string";]]),
++	[AC_LANG_SOURCE(
++		[[const wchar_t* s=L"wide string";]])],
+  	ac_cv_cxx_have_lstring=yes, ac_cv_cxx_have_lstring=no)
+  AC_LANG_RESTORE
+ ])
+--- a/m4/xerces_curl_prefix.m4
++++ b/m4/xerces_curl_prefix.m4
+@@ -68,7 +68,7 @@ AC_DEFUN([XERCES_CURL_PREFIX],
+ 			LIBS="$curl_libs $LIBS"
+ 
+ 			AC_LINK_IFELSE(
+-				AC_LANG_SOURCE[[
++				[AC_LANG_SOURCE([
+                     #include <curl/curl.h>
+                     #include <curl/multi.h>
+                     #include <curl/easy.h>
+@@ -78,7 +78,7 @@ AC_DEFUN([XERCES_CURL_PREFIX],
+                       curl_multi_init();
+                       return 0;
+                     }
+-				]],
++				])],
+ 				[], [xerces_cv_curl_present=no])
+ 
+ 			LIBS=$orig_libs
+--- a/m4/xerces_icu_prefix.m4
++++ b/m4/xerces_icu_prefix.m4
+@@ -86,7 +86,7 @@ AC_DEFUN([XERCES_ICU_PREFIX],
+                     LIBS="$icu_libs $LIBS"
+ 
+                     AC_LINK_IFELSE(
+-                    AC_LANG_SOURCE[[
++                    [AC_LANG_SOURCE([
+                     #include <unicode/ucnv.h>
+ 
+                     int main ()
+@@ -94,7 +94,7 @@ AC_DEFUN([XERCES_ICU_PREFIX],
+                       ucnv_open (0, 0);
+                       return 0;
+                     }
+-                    ]],
++                    ])],
+                     [], [xerces_cv_icu_present=no])
+ 
+                     LIBS=$orig_libs

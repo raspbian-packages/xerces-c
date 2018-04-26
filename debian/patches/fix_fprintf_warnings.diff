@@ -1,0 +1,112 @@
+Description: Fix fprintf type warnings in test programs
+ Some test programs emit compiler warnings about fprintf format specifiers not
+ matching the type of the variable being formatted. This patch corrects those
+ warnings by matching the appropriate specifiers to the types used.
+Author: Bill Blough <devel@blough.us>
+Forwarded: https://issues.apache.org/jira/browse/XERCESC-2081
+Last-Update: 2016-11-07
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/src/DOM/DOMTest/DTest.cpp
++++ b/tests/src/DOM/DOMTest/DTest.cpp
+@@ -2241,7 +2241,7 @@ bool DOMTest::testDocument(DOMDocument*
+         XMLString::transcode(elementNames[i], tempStr, 3999);
+         if (XMLString::compareString(tempStr, n->getNodeName()))
+         {
+-            fprintf(stderr, "Comparison of this document's elements failed at element number %d at line %i \n", i, __LINE__);
++            fprintf(stderr, "Comparison of this document's elements failed at element number %lu at line %i \n", i, __LINE__);
+             OK = false;
+             break;
+         }
+@@ -2273,7 +2273,7 @@ bool DOMTest::testDocument(DOMDocument*
+         XMLString::transcode(newElementNames[i], tempStr, 3999);
+         if (XMLString::compareString(tempStr, n->getNodeName()))
+         {
+-            fprintf(stderr, "Comparison of new document's elements failed at element number %d at line %i \n", i, __LINE__);
++            fprintf(stderr, "Comparison of new document's elements failed at element number %lu at line %i \n", i, __LINE__);
+             OK = false;
+             break;
+         }
+@@ -2292,7 +2292,7 @@ bool DOMTest::testDocument(DOMDocument*
+         XMLString::transcode(elementNames[i], tempStr, 3999);
+         if (XMLString::compareString(tempStr, n->getNodeName()))
+         {
+-            fprintf(stderr, "Comparison of restored document's elements failed at element number %d at line %i \n", i, __LINE__);
++            fprintf(stderr, "Comparison of restored document's elements failed at element number %lu at line %i \n", i, __LINE__);
+             OK = false;
+             break;
+         }
+@@ -2714,7 +2714,7 @@ bool DOMTest::testDOMerrors(DOMDocument*
+         XMLString::transcode(xpath,xpathStr,99); \
+         DOMXPathResult* result=(DOMXPathResult*)document->evaluate(xpathStr, document->getDocumentElement(), NULL, DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE, NULL); \
+         if(result->getSnapshotLength() != expected) {  \
+-            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%d nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
++            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%lu nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
+             OK = false; \
+         }   \
+         result->release(); \
+@@ -2732,7 +2732,7 @@ bool DOMTest::testDOMerrors(DOMDocument*
+         XMLString::transcode(xpath,xpathStr,99); \
+         DOMXPathResult* result=(DOMXPathResult*)document->evaluate(xpathStr, document->getDocumentElement(), resolver, DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE, NULL); \
+         if(result->getSnapshotLength() != expected) {  \
+-            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%d nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
++            fprintf(stderr, "DOMDocument::evaluate does not work in line %i (%lu nodes instead of %d)\n", line, result->getSnapshotLength(), expected);  \
+             OK = false; \
+         }   \
+         result->release(); \
+@@ -2990,7 +2990,7 @@ bool DOMTest::testElement(DOMDocument* d
+         if (XMLString::compareString(tempStr, n->getNodeName()))
+         {
+             fprintf(stderr, "Warning!!! Comparison of DOMElement's 'getElementsByTagName' "
+-                            "and/or 'item' failed at element number %d at line %i \n", i, __LINE__ );
++                            "and/or 'item' failed at element number %lu at line %i \n", i, __LINE__ );
+             fprintf(stderr, "\n");
+             OK = false;
+             break;
+@@ -3019,7 +3019,7 @@ bool DOMTest::testElement(DOMDocument* d
+             if (XMLString::compareString(tempStr, n->getNodeValue()))
+             {
+                 fprintf(stderr, "Warning!!! Comparison of original text nodes via DOMNode*  'getChildNodes' & DOMNodeList 'item'\n"
+-                    "     failed at text node: #%d at line %i \n     ", j, __LINE__ );
++                    "     failed at text node: #%lu at line %i \n     ", j, __LINE__ );
+                 OK = false;
+                 break;
+             }
+--- a/tests/src/EncodingTest/EncodingTest.cpp
++++ b/tests/src/EncodingTest/EncodingTest.cpp
+@@ -71,7 +71,7 @@ void ParseErrorHandler::error(const SAXP
+     char* systemId = XMLString::transcode(e.getSystemId());
+     char* message = XMLString::transcode(e.getMessage());
+ 
+-    fprintf(stderr, "\nError at file \"%s\", line %d, char %d:  %s\n",
++    fprintf(stderr, "\nError at file \"%s\", line %lu, char %lu:  %s\n",
+         systemId, e.getLineNumber(),
+         e.getColumnNumber(), message);
+ 
+@@ -86,7 +86,7 @@ void ParseErrorHandler::fatalError(const
+     char* systemId = XMLString::transcode(e.getSystemId());
+     char* message = XMLString::transcode(e.getMessage());
+ 
+-    fprintf(stderr, "\nFatal Error at file \"%s\", line %d, char %d:  %s\n",
++    fprintf(stderr, "\nFatal Error at file \"%s\", line %lu, char %lu:  %s\n",
+         systemId, e.getLineNumber(),
+         e.getColumnNumber(), message);
+ 
+@@ -100,7 +100,7 @@ void ParseErrorHandler::warning(const SA
+     char* systemId = XMLString::transcode(e.getSystemId());
+     char* message = XMLString::transcode(e.getMessage());
+ 
+-    fprintf(stderr, "\nWarning at file \"%s\", line %d, char %d:  %s\n",
++    fprintf(stderr, "\nWarning at file \"%s\", line %lu, char %lu:  %s\n",
+         systemId, e.getLineNumber(),
+         e.getColumnNumber(), message);
+ 
+@@ -337,7 +337,7 @@ static bool  processTestFile(const XMLCh
+             if (rawIndex < rawUData.getLen())
+             {
+                 fprintf(stderr, "Test file \"%s\": Bad hex number in udata element.  "
+-                    "Data character number %d\n", cFileName, uData.getLen());
++                    "Data character number %lu\n", cFileName, uData.getLen());
+                 return false;
+             }
+     }

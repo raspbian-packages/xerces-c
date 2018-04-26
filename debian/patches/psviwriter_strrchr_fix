@@ -1,0 +1,18 @@
+Description: Fix segfault in PSVIWriter
+Author: Bill Blough <devel@blough.us>
+Bug: https://issues.apache.org/jira/browse/XERCESC-2085
+Last-Update: 2016-12-12
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/samples/src/PSVIWriter/PSVIWriter.cpp
++++ b/samples/src/PSVIWriter/PSVIWriter.cpp
+@@ -270,7 +270,8 @@ int main(int argC, char* argV[])
+ 					if (strrchr(xmlFile, '\\')>strrchr(xmlFile, '/')) {
+ 						strcat(fileName, strrchr(xmlFile, '\\'));
+ 					} else {
+-						strcat(fileName, strrchr(xmlFile, '/'));
++                        if(strrchr(xmlFile, '/'))
++                            strcat(fileName, strrchr(xmlFile, '/'));
+ 					}
+ 	                if (psviFormatter)
+ 	                	delete psviFormatter;

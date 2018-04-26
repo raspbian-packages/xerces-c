@@ -1,0 +1,2 @@
+#False positive, flags are being passed, verified with blhc
+libxerces-c-samples: hardening-no-fortify-functions usr/bin/SAX2Count
