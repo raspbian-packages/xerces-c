@@ -1,0 +1,38 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- --disable-pretty-make --enable-netaccessor-curl --disable-sse2
+	# Note: This disables explicit passing of -msse2 to gcc.  It does not
+	# actually disable sse2 extensions for platforms such as x86_64
+	# (amd64) which enable sse2 extensions by default.
+
+override_dh_compress:
+	dh_compress -plibxerces-c-dev -Xexamples
+	dh_compress -plibxerces-c-doc -Xhtml
+	dh_compress -plibxerces-c3.2
+	dh_compress -plibxerces-c-samples
+
+override_dh_installexamples:
+	dh_installexamples -plibxerces-c-dev -X.o -X.deps -X.dirstamp
+
+override_dh_installdocs:
+	dh_installdocs -A NOTICE
+
+override_dh_auto_build-indep:
+	mkdir -p doc/html
+	java -Djava.awt.headless=true -classpath '/usr/share/java/*' \
+		org.apache.stylebook.StyleBook "targetDirectory=doc/html" \
+		doc/xerces-c_book.xml doc/style
+	(cd doc && doxygen Doxyfile)
+	rm doc/html/graphics/charter-header.jpg
+	rm doc/html/graphics/program-others-3-header.jpg
+
+override_dh_auto_clean:
+	rm -rf doc/html
+	dh_auto_clean
