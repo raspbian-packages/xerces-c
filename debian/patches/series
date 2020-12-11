@@ -1,0 +1,5 @@
+psviwriter_strrchr_fix
+fix_fprintf_warnings.diff
+fix_ac_lang_source_warnings
+CVE-2017-12627.patch
+CVE-2018-1311-mitigation.patch
