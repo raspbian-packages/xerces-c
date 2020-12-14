@@ -1,0 +1,4 @@
+version=4
+
+opts=pgpsigurlmangle=s/$/.asc/,dversionmangle=s/\+debian// \
+https://www.apache.org/dist/xerces/c/3/sources/xerces-c-([\d\.]*)\.tar\.gz
