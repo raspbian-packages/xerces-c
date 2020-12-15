@@ -1,0 +1,4 @@
+At destruction, domBuilderMemMonitor has 180 bytes.
+At destruction, sax2MemMonitor has 180 bytes.
+At destruction, sax1MemMonitor has 180 bytes.
+At destruction, staticMemMonitor has 0 bytes.
