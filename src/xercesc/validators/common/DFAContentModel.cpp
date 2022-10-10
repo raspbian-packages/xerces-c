@@ -24,6 +24,7 @@
 //  Includes
 // ---------------------------------------------------------------------------
 #include <xercesc/util/RuntimeException.hpp>
+#include <xercesc/util/OutOfMemoryException.hpp>
 #include <xercesc/framework/XMLBuffer.hpp>
 #include <xercesc/framework/XMLElementDecl.hpp>
 #include <xercesc/framework/XMLValidator.hpp>
@@ -41,6 +42,7 @@
 #include <xercesc/util/RefHashTableOf.hpp>
 #include <xercesc/util/XMLInteger.hpp>
 #include <math.h>
+#include <limits>
 
 XERCES_CPP_NAMESPACE_BEGIN
 
@@ -606,7 +608,14 @@ void DFAContentModel::buildDFA(ContentSpecNode* const curNode)
     //  in the fLeafCount member.
     //
     fLeafCount=countLeafNodes(curNode);
+    // Avoid integer overflow in below fLeafCount++ increment
+    if (fLeafCount > (std::numeric_limits<unsigned int>::max() - 1))
+        throw OutOfMemoryException();
     fEOCPos = fLeafCount++;
+
+    // Avoid integer overflow in below memory allocation
+    if (fLeafCount > (std::numeric_limits<size_t>::max() / sizeof(CMLeaf*)))
+        throw OutOfMemoryException();
 
     //  We need to build an array of references to the non-epsilon
     //  leaf nodes. We will put them in the array according to their position values
@@ -1304,14 +1313,27 @@ unsigned int DFAContentModel::countLeafNodes(ContentSpecNode* const curNode)
         if(nLoopCount!=0)
         {
             count += countLeafNodes(cursor);
-            for(unsigned int i=0;i<nLoopCount;i++)
-                count += countLeafNodes(rightNode);
+            const unsigned int countRight = countLeafNodes(rightNode);
+            // Avoid integer overflow in below multiplication
+            if (countRight > (std::numeric_limits<unsigned int>::max() / nLoopCount))
+                throw OutOfMemoryException();
+            const unsigned int countRightMulLoopCount = nLoopCount * countRight;
+            // Avoid integer overflow in below addition
+            if (count > (std::numeric_limits<unsigned int>::max() - countRightMulLoopCount))
+                throw OutOfMemoryException();
+            count += countRightMulLoopCount;
             return count;
         }
         if(leftNode)
             count+=countLeafNodes(leftNode);
         if(rightNode)
-            count+=countLeafNodes(rightNode);
+        {
+            const unsigned int countRight = countLeafNodes(rightNode);
+            // Avoid integer overflow in below addition
+            if (count > (std::numeric_limits<unsigned int>::max() - countRight))
+                throw OutOfMemoryException();
+            count+=countRight;
+        }
     }
     return count;
 }
