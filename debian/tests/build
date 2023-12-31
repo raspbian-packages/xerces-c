@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+WORKDIR=$(mktemp -d)
+trap "rm -rf $WORKDIR " 0 INT QUIT ABRT PIPE TERM
+cd $WORKDIR
+cat <<EOF > xerces_test.cpp
+#include <iostream>
+#include <xercesc/util/PlatformUtils.hpp>
+
+using namespace xercesc;
+
+int main() {
+
+    try {
+        XMLPlatformUtils::Initialize();
+    }
+    catch(const XMLException& ex) {
+        std::cerr << "An error occurred during initialization" << std::endl;
+        return -1;
+    }
+
+    XMLPlatformUtils::Terminate();
+    return 0;
+}
+EOF
+
+g++ -o xerces_test xerces_test.cpp $(pkg-config --cflags --libs xerces-c)
+echo "build: OK"
+[ -x xerces_test ]
+./xerces_test
+echo "run: OK"
+
