@@ -1,0 +1,46 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -227,6 +227,7 @@ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#
+                       AC_DEFINE_UNQUOTED([HAVE_MBRLEN], 0, [Define to 1 if you have the `mbrlen' function.])
+                     ]
+                  )
++AC_CHECK_FUNC([wcsrtombs],[
+ AC_MSG_CHECKING([for wcsrtombs])
+ AC_RUN_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>
+ #include <string.h>]],
+@@ -269,8 +270,17 @@ else
+                           AC_MSG_RESULT([no])
+                           AC_DEFINE_UNQUOTED([HAVE_WCSRTOMBS], 0, [Define to 1 if you have the `wcsrtombs' function.])
+                         ])
++                    ],
++                    [
++                      AC_MSG_RESULT([cross. guessing yes])
++                      AC_DEFINE_UNQUOTED([HAVE_WCSRTOMBS], 1, [Define to 1 if you have the `wcsrtombs' function.])
+                     ]
+                  )
++],
++[
++  AC_DEFINE_UNQUOTED([HAVE_WCSRTOMBS], 0, [Define to 1 if you have the `wcsrtombs' function.])
++])
++AC_CHECK_FUNC([mbsrtowcs],[
+ AC_MSG_CHECKING([for mbsrtowcs])
+ AC_RUN_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>
+ #include <string.h>]],
+@@ -313,8 +323,16 @@ else
+                         AC_MSG_RESULT([no])
+                         AC_DEFINE_UNQUOTED([HAVE_MBSRTOWCS], 0, [Define to 1 if you have the `mbsrtowcs' function.])
+                       ])
+-                    ] 
++                    ],
++                    [
++                      AC_MSG_RESULT([cross. guessing yes])
++                      AC_DEFINE_UNQUOTED([HAVE_MBSRTOWCS], 1, [Define to 1 if you have the `mbsrtowcs' function.])
++                    ]
+                  )
++],
++[
++  AC_DEFINE_UNQUOTED([HAVE_MBSRTOWCS], 0, [Define to 1 if you have the `mbsrtowcs' function.])
++])
+ 
+ AC_MSG_CHECKING([if iconv uses const pointers])
+ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <iconv.h>]],
