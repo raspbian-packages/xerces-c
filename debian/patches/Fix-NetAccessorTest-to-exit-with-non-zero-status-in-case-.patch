@@ -1,0 +1,44 @@
+From: Boris Kolpackov <boris@codesynthesis.com>
+Date: Wed, 13 Dec 2023 08:46:59 +0200
+Subject: Fix NetAccessorTest to exit with non-zero status in case of error
+
+Origin: https://github.com/apache/xerces-c/commit/12eecd6b97840b3b49147f6c4245295d83c1198d
+---
+ tests/src/NetAccessorTest/NetAccessorTest.cpp | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tests/src/NetAccessorTest/NetAccessorTest.cpp b/tests/src/NetAccessorTest/NetAccessorTest.cpp
+index 3bb735b..c2affbd 100644
+--- a/tests/src/NetAccessorTest/NetAccessorTest.cpp
++++ b/tests/src/NetAccessorTest/NetAccessorTest.cpp
+@@ -122,6 +122,8 @@ main(int argc, char** argv)
+     // Get the URL
+     char* url = argv[1];
+     
++    int r = 1;
++
+     // Do the test
+     try
+     {
+@@ -148,11 +150,11 @@ main(int argc, char** argv)
+ 		
+ 		// Delete the is
+ 		delete is;
+-	
++		r = 0;
+     }
+     catch(const XMLException& toCatch)
+     {
+-        XERCES_STD_QUALIFIER cout << "Exception during test:\n    "
++        XERCES_STD_QUALIFIER cerr << "Exception during test:\n    "
+              << toCatch.getMessage()
+              << XERCES_STD_QUALIFIER endl;
+     }
+@@ -160,6 +162,6 @@ main(int argc, char** argv)
+     // And call the termination method
+     XMLPlatformUtils::Terminate();
+ 
+-    return 0;
++    return r;
+ }
+ 
