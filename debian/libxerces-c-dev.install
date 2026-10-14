@@ -1,0 +1,4 @@
+usr/include
+usr/lib/*/lib*.a
+usr/lib/*/libxerces-c.so
+usr/lib/*/pkgconfig
